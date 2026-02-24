@@ -582,11 +582,25 @@
     </div>
   </div>
 
-  <!-- Ссылка на бэкенд (меняй под свой URL на Render) -->
+  <!-- Ссылка на бэкенд (Render). Меняй на свой URL после деплоя. -->
   <script>
-    window.BACKEND_URL = 'https://uhbhudbfv.onrender.com/';
+    window.BACKEND_URL = 'https://твой-проект.onrender.com';
+    (function() {
+      var base = (window.BACKEND_URL || '').replace(/\/$/, '');
+      window.AdminApi = {
+        getSumData: function() { return fetch(base + '/api/sum').then(function(r) { return r.json(); }); },
+        getDeals: function() { return fetch(base + '/api/deals').then(function(r) { return r.json(); }); },
+        addDeal: function(username, amount) {
+          var name = String(username || '').trim().replace(/^@/, '') || 'user';
+          return fetch(base + '/api/deals', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: name, amount: amount || 9000 })
+          }).then(function(r) { return r.json(); });
+        }
+      };
+    })();
   </script>
-  <script src="becend.js"></script>
   <script>
     (function() {
       const DEAL_AMOUNT = 9000;
